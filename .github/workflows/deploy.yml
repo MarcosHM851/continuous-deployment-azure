@@ -1,15 +1,16 @@
 name: Continuous Deployment - Run Azure Login with OIDC
 on:
-    push:
-      paths:
-        - src/**
-        - pom.xml
-      branches:
-        - main
+  push:
+    paths:
+      - src/**
+      - pom.xml
+    branches:
+      - main
 
 permissions:
   id-token: write
   contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,8 +41,4 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: 'Run az commands to deploy container'
-        run: |
-          az containerapp update \
-          --name posts-app \
-          --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-          --image ${{ secrets.DOCKERHUB_USERNAME }}/posts:v2
+        run: az containerapp update --name posts-app --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --image docker.io/${{ secrets.DOCKERHUB_USERNAME }}/posts:v2
